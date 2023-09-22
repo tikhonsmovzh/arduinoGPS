@@ -8,6 +8,7 @@ class Navigation {
     bool isGPSOpen = false;
 
     double latitude = 0, logatutde = 0;
+    SphereCoords *coord;
     long longLatitude = 0, longLogatutde = 0;
 
     int GetCompaseValue()
@@ -59,7 +60,7 @@ class Navigation {
 
   public:
     byte buf[6];
-  
+
     void Init() {
       Wire.beginTransmission(addr);
       Wire.write(0x00);
@@ -82,9 +83,10 @@ class Navigation {
 
         gps.get_position(&lat, &lon);
 
-        //coords = SphereCoords((double)lat / (double)1000000, (double)lon / (double)1000000);
-        latitude = (double)lat / (double)1000000;
-        logatutde = (double)lon / (double)1000000;
+        if (coord != NULL)
+          delete coord;
+
+        coord = new SphereCoords((double)lat / (double)1000000, (double)lon / (double)1000000);
 
         longLatitude = lat;
         longLogatutde = lon;
@@ -109,23 +111,19 @@ class Navigation {
       return isGPSOpen;
     }
 
-    double GetLat() {
-      return latitude;
-    }
-
-    double GetLon() {
-      return logatutde;
-    }
-
-    long GetLongLat() {
+    double GetLongLat() {
       return longLatitude;
+    }
+
+    SphereCoords *GetCoord() {
+      return coord;
     }
 
     long GetLongLong() {
       return longLogatutde;
     }
 
-    int GetAzimut(){
+    int GetAzimut() {
       return compass;
     }
 };

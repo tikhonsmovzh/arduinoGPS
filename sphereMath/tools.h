@@ -28,4 +28,6 @@ class Tools {
     const int SaveBaseData = 0;
 };
 
+bool isManual = false, isStart = false;
+
 Tools tools;
